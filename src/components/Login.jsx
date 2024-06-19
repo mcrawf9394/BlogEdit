@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Form } from "react-router-dom";
 import Info from '../info.js'
+import { v4 as uuidv4} from 'uuid'
 function Login () {
     const [user, setUser] = useState('')
     const [pass, setPass] = useState('')
@@ -9,9 +10,9 @@ function Login () {
     return <>
         <Form>
             <label htmlFor="username">Username</label>
-            <input name="username" type="text" value={user} onChange={e => {setUser(e.target.value)}} required/>
+            <input id="username" type="text" value={user} onChange={e => {setUser(e.target.value)}} required/>
             <label htmlFor="password">Password</label>
-            <input name="password" type="text" value={pass} onChange={e => {setPass(e.target.value)}} required/>
+            <input id="password" type="text" value={pass} onChange={e => {setPass(e.target.value)}} required/>
             <button onClick={async (click) => {
                   click.preventDefault()
                   try {const request = await fetch(Info + '/users/login', {
@@ -39,10 +40,10 @@ function Login () {
         <ul>
             {error.map(error => {
                 if (error === '') {
-                    return <></>
+                    return <li key={uuidv4()} hidden></li>
                 }
                 else {
-                    return <li>
+                    return <li key={uuidv4()}>
                         {error.msg}
                     </li>
                 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate, Form, useParams } from "react-router-dom"
 import Info from "../info.js"
+import { v4 as uuidv4} from 'uuid'
 function Update () {
     const navigate = useNavigate()
     const params = useParams()
@@ -26,9 +27,9 @@ function Update () {
         return <>
             <Form>
                 <label htmlFor="title">Title</label>
-                <input name="title" type="text" value={title} onChange={e => {setTitle(e.target.value)}} required/>
+                <input id="title" type="text" value={title} onChange={e => {setTitle(e.target.value)}} required/>
                 <label htmlFor="postContent">Post Content</label>
-                <input name="postContent" type="text" value={postContent} onChange={e => {setPostContent(e.target.value)}} required/>
+                <input id="postContent" type="text" value={postContent} onChange={e => {setPostContent(e.target.value)}} required/>
                 <button onClick={async (click) => {
                     click.preventDefault()
                     const request = await fetch(`${Info}/posts/${params.postId}`, {
@@ -51,10 +52,9 @@ function Update () {
             <ul>
                 {errors.map(error => {
                     if (error === '') {
-                        return <>
-                        </>
+                        return <li key={uuidv4()} hidden></li>
                     } else {
-                        <li>{error.msg}</li>
+                        return <li key={uuidv4()}>{error.msg}</li>
                     }
                 })}
             </ul>

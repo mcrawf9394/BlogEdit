@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Info from '../info.js'
+import {v4 as uuidv4} from 'uuid'
 function App() {
   const [content, setContent] = useState(['loading'])
   const [errors, setErrors] = useState([''])
@@ -57,9 +58,9 @@ function App() {
       <ul>
         {errors.map(error => {
           if (error === '') {
-            return <> </>
+            return <li key={uuidv4()} hidden></li>
           } else {
-            return <li>{error.msg}</li>  
+            return <li key={uuidv4()}>{error.msg}</li>  
           }
         })}
       </ul>
