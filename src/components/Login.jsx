@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Form } from "react-router-dom";
+import Info from '../info.js'
 function Login () {
     const [user, setUser] = useState('')
     const [pass, setPass] = useState('')
@@ -13,7 +14,7 @@ function Login () {
             <input name="password" type="text" value={pass} onChange={e => {setPass(e.target.value)}} required/>
             <button onClick={async (click) => {
                   click.preventDefault()
-                  try {const request = await fetch('http://localhost:3000/api/users/login', {
+                  try {const request = await fetch(Info + '/users/login', {
                       method: 'POST',
                       mode: "cors",
                       headers: {"Content-Type": "application/json"},
@@ -42,7 +43,7 @@ function Login () {
                 }
                 else {
                     return <li>
-                        {error}
+                        {error.msg}
                     </li>
                 }
             })}

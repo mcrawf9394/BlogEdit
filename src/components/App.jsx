@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
+import Info from '../info.js'
 function App() {
   const [content, setContent] = useState(['loading'])
+  const [errors, setErrors] = useState([''])
   useEffect(() => {
     const getItem = async () => {
-      const request = await fetch('http://localhost:3000/api/posts')
+      const request = await fetch(Info + '/posts')
       const info = await request.json()
       setContent(info.posts)
     }
@@ -18,6 +20,9 @@ function App() {
       </>
   } else {
     return <>
+      <a href="/addpost">
+        <button>Add New Post</button>
+      </a>
       {content.map(post => {
         if (post === 'loading') {
           return <>
@@ -25,15 +30,39 @@ function App() {
           </>
         } else {
           return <div>
-          <h2>{post.title}</h2>
-          <p>{post.postContent}</p>
-          <a href="/updatepost">
-            <button>Update</button>
-          </a>
-          <button>Delete</button>
+            <h2>{post.title}</h2>
+            <p>{post.postContent}</p>
+            <a href={"/updatepost/" + post._id}>
+              <button>Update</button>
+            </a>
+            <button onClick={async (click) => {
+              click.preventDefault()
+              const request = await fetch (Info + '/posts/' + post._id, {
+                method: 'DELETE',
+                mode: "cors",
+                headers: {"Content-Type": "application/json",'Authorization': `Bearer ${localStorage.getItem('token')}`}
+              })
+              const response = await request.json()
+              if (response.error) {
+                setErrors(response.error)
+              } else {
+                  const request = await fetch(Info + '/posts')
+                  const info = await request.json()
+                  setContent(info.posts)
+              }
+            }}>Delete</button>
           </div>
         }
       })}
+      <ul>
+        {errors.map(error => {
+          if (error === '') {
+            return <> </>
+          } else {
+            return <li>{error.msg}</li>  
+          }
+        })}
+      </ul>
     </>
   }
 }

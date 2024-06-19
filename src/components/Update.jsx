@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate, Form, useParams } from "react-router-dom"
+import Info from "../info.js"
 function Update () {
     const navigate = useNavigate()
     const params = useParams()
@@ -9,11 +10,11 @@ function Update () {
     const [errors, setErrors] = useState([''])
     useEffect(() => {
         const getInfo = async () => {
-            const request = await fetch(`http://localhost:3000/api/posts/${params.postId}`, {
-                method: 'PUT',
-                mode: 'cors',
-                headers: '',             
-            })
+            const request = await fetch(`${Info}/posts/${params.postId}`)
+            const info = await request.json()
+            setContent(info)
+            setTitle(info.post.title)
+            setPostContent(info.post.postContent)
         }
         getInfo()
     },[])
@@ -24,13 +25,27 @@ function Update () {
     } else {
         return <>
             <Form>
-                <label htmlFor="title"></label>
+                <label htmlFor="title">Title</label>
                 <input name="title" type="text" value={title} onChange={e => {setTitle(e.target.value)}} required/>
-                <label htmlFor="postContent"></label>
+                <label htmlFor="postContent">Post Content</label>
                 <input name="postContent" type="text" value={postContent} onChange={e => {setPostContent(e.target.value)}} required/>
                 <button onClick={async (click) => {
                     click.preventDefault()
-
+                    const request = await fetch(`${Info}/posts/${params.postId}`, {
+                        method: 'PUT',
+                        mode: "cors",
+                        headers: {"Content-Type": "application/json",'Authorization': `Bearer ${localStorage.getItem('token')}`},
+                        body: JSON.stringify({
+                            "title": title,
+                            "postContent": postContent
+                        })
+                    })
+                    const response = await request.json()
+                    if (response.error) {
+                        setErrors(response.error)
+                    } else {
+                        navigate('/')
+                    }
                 }}>Submit</button>
             </Form>
             <ul>
@@ -39,7 +54,7 @@ function Update () {
                         return <>
                         </>
                     } else {
-                        <li>{error}</li>
+                        <li>{error.msg}</li>
                     }
                 })}
             </ul>

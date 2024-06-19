@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './components/App.jsx'
 import Login from './components/Login.jsx'
 import Update from './components/Update.jsx'
+import Add from './components/Add.jsx'
 import './stylesheet/index.css'
 
 const router = createBrowserRouter([
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: '/updatepost/:postId',
     element: <Update />
+  },
+  {
+    path: '/addpost',
+    element: <Add />
   }
 ])
 
