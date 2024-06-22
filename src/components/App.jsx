@@ -13,16 +13,16 @@ function App() {
     getItem()
   }, [])
   if (!localStorage.getItem('token')) {
-    return <>
-        <h1 className='text-2xl'>This page is for editing Sam's Blog, while this will let you login if you have an account on the blog viewing page, it will not give you any add benefit in this case, as only the admin account can add, update or delete posts for the site</h1>
+    return <div className='h-screen w-8/12 mx-auto my-auto rounded-3xl bg-gray-600'>
+        <h1 className='text-2xl text-white'>This page is for editing Sam's Blog, while this will let you login if you have an account on the blog viewing page, it will not give you any add benefit in this case, as only the admin account can add, update or delete posts for the site</h1>
         <a href="/login">
-          <button>Login</button>
+          <button className="bg-gray-600 border-black border-solid border-4 rounded-xl w-2/12 hover:scale-110 text-white">Login</button>
         </a>
-      </>
+      </div>
   } else {
-    return <>
-      <a href="/addpost">
-        <button>Add New Post</button>
+    return <div className='h-screen w-8/12 mx-auto my-auto rounded-3xl bg-gray-600'>
+      <a className='mx-32 my-4' href="/addpost">
+        <button className="bg-gray-600 border-black border-solid border-4 rounded-xl w-2/12 hover:scale-110 text-white">Add New Post</button>
       </a>
       {content.map(post => {
         if (post === 'loading') {
@@ -30,13 +30,13 @@ function App() {
             <h1 className='text-6xl'>Loading</h1>
           </>
         } else {
-          return <div>
-            <h2>{post.title}</h2>
-            <p>{post.postContent}</p>
-            <a href={"/updatepost/" + post._id}>
-              <button>Update</button>
+          return <div className='mx-32' key={uuidv4()}>
+            <h2 className='text-white my-4'>{post.title}</h2>
+            <p className='text-white my-4'>{post.postContent}</p>
+            <a className='my-4 mr-4' href={"/updatepost/" + post._id}>
+              <button className="bg-gray-600 border-black border-solid border-4 rounded-xl w-2/12 hover:scale-110 text-white">Update</button>
             </a>
-            <button onClick={async (click) => {
+            <button className="my-4 bg-gray-600 border-black border-solid border-4 rounded-xl w-2/12 hover:scale-110 text-white" onClick={async (click) => {
               click.preventDefault()
               const request = await fetch (Info + '/posts/' + post._id, {
                 method: 'DELETE',
@@ -64,7 +64,7 @@ function App() {
           }
         })}
       </ul>
-    </>
+    </div>
   }
 }
 
